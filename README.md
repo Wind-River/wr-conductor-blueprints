@@ -3,12 +3,25 @@
 This repository includes data required by the Blueprints marketplace in Wind
 River Conductor Manager.
 
-## Project License
+## Installation
 
-The license for this project is the Apache 2.0 license. Text of the Apache 2.0
-license and other applicable license notices can be found in the LICENSE file
-in the top level directory. Each source file should include a license notice
-that designates the licensing terms for the respective file.
+The blueprint can be uploaded to the Conductor Manager with Conductor CLI, Conductor Management Console, or Conductor API.
+Refer to [Wind River Conductor Documentation - Uploading a Blueprint](https://docs.windriver.com/r/bundle/in_wind_river_conductor_working_with_25_09/page/using_the_conductor_manager_section.html?tocId=Jr2wmnr%7E7%7EHtCvCcpyOODw) for further information.
+
+## License
+
+The license for this project is Apache 2.0. License information and other applicable 
+license notices can be found in the top level directory LICENSE file. 
+
+This project may also incorporate other third party open source licensed components.
+The license for these components can be found in their respective source file headers
+or their associated license files.
+
+As a convenience, the THIRD\_PARTY\_NOTICES file contains notices and license 
+information for the third party components contained in this project, 
+however this information is not meant to be a substitute for the license information 
+contained in any source file headers or their associated license files. 
+
 
 
 ## Legal Notices
@@ -16,9 +29,7 @@ that designates the licensing terms for the respective file.
 All product names, logos, and brands are property of their respective owners.
 All company, product and service names used in this software are for
 identification purposes only. Wind River is a registered trademark of Wind River
-Systems, Inc.  OpenStack is a registered trademark of the OpenStack Foundation.
-Kubernetes is a registered trademark of Google Inc.  Helm is a trademark of The
-Linux Foundation®.
+Systems, Inc.
 
 Disclaimer of Warranty / No Support: Wind River does not provide support and
 maintenance services for this software, under Wind River’s standard Software

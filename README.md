@@ -8,6 +8,12 @@ River Conductor Manager.
 The blueprint can be uploaded to the Conductor Manager with Conductor CLI, Conductor Management Console, or Conductor API.
 Refer to [Wind River Conductor Documentation - Uploading a Blueprint](https://docs.windriver.com/r/bundle/in_wind_river_conductor_working_with_25_09/page/using_the_conductor_manager_section.html?tocId=Jr2wmnr%7E7%7EHtCvCcpyOODw) for further information.
 
+## Usage
+This project serves as a artifact repository for the Wind River Conductor Marketplace.
+
+## Contributing
+This project is not intended to receive external contribution.
+
 ## License
 
 The license for this project is Apache 2.0. License information and other applicable 

@@ -9,7 +9,8 @@ The blueprint can be uploaded to the Conductor Manager with Conductor CLI, Condu
 Refer to [Wind River Conductor Documentation - Uploading a Blueprint](https://docs.windriver.com/r/bundle/in_wind_river_conductor_working_with_25_09/page/using_the_conductor_manager_section.html?tocId=Jr2wmnr%7E7%7EHtCvCcpyOODw) for further information.
 
 ## Usage
-This project serves as a artifact repository for the Wind River Conductor Marketplace.
+This project serves as an artifact repository for the Wind River Conductor Marketplace.
+To create your custom blueprint refer to the [Developer Reference Guide](https://docs.windriver.com/r/bundle/in_wind_river_conductor_developer_25_09).
 
 ## Contributing
 This project is not intended to receive external contribution.

@@ -1,0 +1,9 @@
+FROM ubuntu:22.04
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ttyd telnet && \
+    rm -rf /var/lib/apt/lists/*
+
+EXPOSE 7681
+
+ENTRYPOINT ["ttyd", "--writable", "telnet", "localhost", "10023"]

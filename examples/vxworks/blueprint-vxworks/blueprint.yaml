@@ -1,0 +1,103 @@
+tosca_definitions_version: cloudify_dsl_1_3
+
+metadata:
+  blueprint_name: vxworks-k8s
+
+description: >
+  Deploys a VxWorks RTOS instance on a WRCP-hosted Kubernetes cluster with a web terminal.
+
+imports:
+  - cloudify/types/types.yaml
+  - plugin:cloudify-kubernetes-plugin
+
+inputs:
+  kubernetes_master_endpoint:
+    description: Kubernetes API server endpoint
+    type: string
+    default: https://127.0.0.1:6443
+
+  kubernetes_token_secret:
+    description: Secret name containing the kubernetes token
+    type: string
+    default: kubernetes_token
+
+  image_registry:
+    description: Docker registry to pull VxWorks images from
+    type: string
+    default: cluster.local:5000
+
+dsl_definitions:
+  client_config: &client_config
+    configuration:
+      api_options:
+        host: { get_input: kubernetes_master_endpoint }
+        api_key: { get_secret: { get_input: kubernetes_token_secret } }
+        debug: false
+        verify_ssl: false
+
+node_templates:
+  vxworks_qemu:
+    type: cloudify.kubernetes.resources.Deployment
+    properties:
+      client_config: *client_config
+      definition:
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: vxworks-k8s
+          namespace: default
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: vxworks-k8s
+          template:
+            metadata:
+              labels:
+                app: vxworks-k8s
+            spec:
+              containers:
+                - name: qemu
+                  image: { concat: [{ get_input: image_registry }, '/vxworks-qemu:latest'] }
+                  imagePullPolicy: Always
+                  resources:
+                    requests:
+                      memory: "4Gi"
+                      cpu: "4"
+                    limits:
+                      memory: "5Gi"
+                      cpu: "4"
+                  ports:
+                    - containerPort: 10023
+                      name: telnet
+                  env:
+                    - name: QEMU_MEM
+                      value: "4G"
+                    - name: QEMU_SMP
+                      value: "4"
+                - name: ttyd
+                  image: { concat: [{ get_input: image_registry }, '/vxworks-ttyd:latest'] }
+                  imagePullPolicy: Always
+                  ports:
+                    - containerPort: 7681
+                      name: web-terminal
+                  command: ["ttyd", "telnet", "localhost", "10023"]
+
+  vxworks_service:
+    type: cloudify.kubernetes.resources.FileDefinedResource
+    properties:
+      client_config: *client_config
+      file:
+        resource_path: resources/vxworks-service.yaml
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: vxworks_qemu
+
+outputs:
+  web_terminal_endpoint:
+    description: VxWorks web terminal (ttyd)
+    value: http://127.0.0.1:30681/
+
+  telnet_endpoint:
+    description: VxWorks telnet access
+    value: 127.0.0.1:30023

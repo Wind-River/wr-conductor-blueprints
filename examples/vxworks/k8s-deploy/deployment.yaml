@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vxworks-qemu
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vxworks-qemu
+  template:
+    metadata:
+      labels:
+        app: vxworks-qemu
+    spec:
+      containers:
+        - name: qemu
+          image: cluster.local:5000/vxworks-qemu:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "4Gi"
+              cpu: "4"
+            limits:
+              memory: "5Gi"
+              cpu: "4"
+          ports:
+            - containerPort: 10023
+              name: telnet
+          env:
+            - name: QEMU_MEM
+              value: "4G"
+            - name: QEMU_SMP
+              value: "4"
+        - name: ttyd
+          image: cluster.local:5000/vxworks-ttyd:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7681
+              name: web-terminal
+          command: ["ttyd", "--writable", "telnet", "localhost", "10023"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vxworks-qemu
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    app: vxworks-qemu
+  ports:
+    - name: telnet
+      port: 10023
+      targetPort: 10023
+      nodePort: 30023
+    - name: web-terminal
+      port: 7681
+      targetPort: 7681
+      nodePort: 30681

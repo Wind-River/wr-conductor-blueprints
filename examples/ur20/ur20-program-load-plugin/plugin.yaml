@@ -1,0 +1,38 @@
+plugins:
+  ur20:
+    executor: central_deployment_agent
+    package_name: ur20-program-load-plugin
+    source: ur20_program_load_plugin-1.0.0-py310-none-any.wgn
+
+node_types:
+  ur20.nodes.Robot:
+    derived_from: cloudify.nodes.Root
+    properties:
+      robot_host:
+        type: string
+      api_port:
+        type: integer
+        default: 8888
+      program_name:
+        type: string
+        default: "Default program"
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          implementation: ur20.ur20_program_load.tasks.start
+
+workflows:
+  program_load:
+    mapping: ur20.ur20_program_load.tasks.load_program
+    parameters:
+      program_name:
+        description: "Program to load"
+        default: "Default program"
+
+  program_start:
+    mapping: ur20.ur20_program_load.tasks.start_program
+    parameters: {}
+
+  program_stop:
+    mapping: ur20.ur20_program_load.tasks.stop_program
+    parameters: {}

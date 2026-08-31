@@ -1,0 +1,45 @@
+tosca_definitions_version: cloudify_dsl_1_4
+
+imports:
+  - cloudify/types/types.yaml
+  - plugin:ur20-program-load-plugin
+
+inputs:
+  robot_host:
+    type: string
+    default: "172.25.58.81"
+  api_port:
+    type: integer
+    default: 8000
+  program_name:
+    type: string
+    description: "Program to load"
+    default: "Default Program"
+    constraints:
+      - valid_values: ["Default Program", "ProgramA", "ProgramB"]
+
+node_templates:
+  ur20_robot:
+    type: ur20.nodes.Robot
+    properties:
+      robot_host: { get_input: robot_host }
+      api_port: { get_input: api_port }
+      program_name: { get_input: program_name }
+
+workflows:
+  program_load:
+    mapping: ur20.ur20_program_load.tasks.load_program
+    parameters:
+      program_name:
+        description: "Program to load"
+        default: "Default Program"
+        constraints:
+          - valid_values: ["Default Program", "ProgramA", "ProgramB"]
+
+  program_start:
+    mapping: ur20.ur20_program_load.tasks.start_program
+    parameters: {}
+
+  program_stop:
+    mapping: ur20.ur20_program_load.tasks.stop_program
+    parameters: {}

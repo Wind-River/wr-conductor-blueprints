@@ -1,0 +1,15 @@
+FROM ubuntu:22.04
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends qemu-system-x86 && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY wrsdk-vxworks7-qemu-1.17.0/vxsdk/bsps/itl_generic_3_0_0_5/vxWorks /opt/vxworks/vxWorks
+COPY vxe/ /opt/vxworks/app/
+
+COPY k8s-deploy/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 1534 2345 10023
+
+ENTRYPOINT ["/entrypoint.sh"]
